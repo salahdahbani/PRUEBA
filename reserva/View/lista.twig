@@ -1,0 +1,67 @@
+{% extends "base.twig" %}
+
+{% block titulo %}Listado de reservas{% endblock %}
+
+{% block contenido %}
+    <h1>Reservas</h1>
+        <p><a href="nueva.php" class="boton">+ Nueva reserva</a></p>
+
+    <form id="form-filtros" class="filtros" method="get" action="index.php">
+        <label>Estado
+            <select name="estado" id="filtro-estado">
+                <option value="">Todos</option>
+                {% for e in ['pendiente', 'confirmada', 'cancelada'] %}
+                    <option value="{{ e }}" {% if e == filtros.estado %}selected{% endif %}>{{ e|capitalize }}</option>
+                {% endfor %}
+            </select>
+        </label>
+
+        <label>Entrada desde
+            <input type="date" name="desde" id="filtro-desde" value="{{ filtros.desde }}">
+        </label>
+
+        <label>Salida hasta
+            <input type="date" name="hasta" id="filtro-hasta" value="{{ filtros.hasta }}">
+        </label>
+
+        <label>Huésped
+            <input type="text" name="huesped" id="filtro-huesped" value="{{ filtros.huesped }}" placeholder="Nombre">
+        </label>
+
+        <button type="submit">Filtrar</button>
+        <a href="index.php" class="enlace-limpiar">Limpiar</a>
+    </form>
+
+    <div class="tabla-contenedor">
+        <table>
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Huésped</th>
+                    <th>Alojamiento</th>
+                    <th>Entrada</th>
+                    <th>Salida</th>
+                    <th>Estado</th>
+                    <th class="derecha">Importe</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="tabla-reservas">
+                {% for r in reservas %}
+                    <tr>
+                        <td>{{ r.id }}</td>
+                        <td>{{ r.nombre_huesped }}</td>
+                        <td>{{ r.nombre_alojamiento }}</td>
+                        <td>{{ r.fecha_entrada|date('d/m/Y') }}</td>
+                        <td>{{ r.fecha_salida|date('d/m/Y') }}</td>
+                        <td><span class="estado estado-{{ r.estado }}">{{ r.estado|capitalize }}</span></td>
+                        <td class="derecha">{{ r.importe|number_format(2, ',', '.') }} €</td>
+                        <td><a href="detalle.php?id={{ r.id }}">Ver</a></td>
+                    </tr>
+                {% else %}
+                    <tr><td colspan="8">No hay reservas con esos filtros</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

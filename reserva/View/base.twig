@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block titulo %}Reservas{% endblock %} · Gestión de reservas</title>
+    <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+    <header class="cabecera">
+        <a href="index.php">Gestión de reservas</a>
+    </header>
+
+    <main class="contenedor">
+        {% block contenido %}{% endblock %}
+    </main>
+
+    {% block scripts %}
+<script>
+    const API = 'api.php';
+    const id = {{ reserva.id|json_encode|raw }};
+
+    document.querySelectorAll('[data-estado]').forEach(function (boton) {
+        boton.addEventListener('click', async function () {
+            const estado = boton.dataset.estado;
+            if (estado === 'cancelada' && !confirm('¿Seguro que quieres cancelar la reserva?')) return;
+
+            const respuesta = await fetch(API + '/reservas/' + id + '/estado', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ estado: estado })
+            });
+
+            if (respuesta.ok) {
+                location.reload();
+            } else {
+                const datos = await respuesta.json();
+                document.getElementById('mensaje').textContent = datos.error || 'No se ha podido cambiar el estado';
+            }
+        });
+    });
+</script>
+{% endblock %}
+</body>
+</html>
