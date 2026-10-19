@@ -1,0 +1,45 @@
+{% extends "base.twig" %}
+
+{% block titulo %}Reserva {{ reserva.id }}{% endblock %}
+
+{% block contenido %}
+    <a href="index.php">Volver</a>
+
+    <h1>Reserva {{ reserva.id }}</h1>
+    <p>Estado: {{ reserva.estado }}</p>
+
+    <button onclick="cambiarEstado('confirmada')">Confirmar</button>
+    <button onclick="cambiarEstado('cancelada')">Cancelar</button>
+    <p style="color: red;" id="mensaje"></p>
+
+    <p>Huésped: {{ reserva.nombre_huesped }}</p>
+    <p>Email: {{ reserva.email_huesped }}</p>
+    <p>Alojamiento: {{ reserva.nombre_alojamiento }}</p>
+    <p>Entrada: {{ reserva.fecha_entrada }}</p>
+    <p>Salida: {{ reserva.fecha_salida }}</p>
+    <p>Importe: {{ reserva.importe }} €</p>
+    <p>Notas: {{ reserva.notas }}</p>
+
+    <h2>Historial</h2>
+    <ul>
+        {% for e in eventos %}
+            <li>{{ e.fecha_creacion }} - {{ e.descripcion }}</li>
+        {% endfor %}
+    </ul>
+
+    <script>
+        function cambiarEstado(estado) {
+            fetch('api.php/reservas/{{ reserva.id }}/estado', {
+                method: 'PUT',
+                body: JSON.stringify({ estado: estado })
+            })
+            .then(respuesta => respuesta.json().then(datos => {
+                if (respuesta.ok) {
+                    location.reload();
+                } else {
+                    document.getElementById('mensaje').textContent = datos.error;
+                }
+            }));
+        }
+    </script>
+{% endblock %}

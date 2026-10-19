@@ -1,0 +1,52 @@
+{% extends "base.twig" %}
+
+{% block titulo %}Nueva reserva{% endblock %}
+
+{% block contenido %}
+    <a href="index.php">Volver</a>
+
+    <h1>Nueva reserva</h1>
+
+    <form onsubmit="crearReserva(event)">
+        <p>Huésped: <input type="text" name="nombre_huesped"></p>
+        <p>Email: <input type="text" name="email_huesped"></p>
+        <p>Alojamiento: <input type="text" name="nombre_alojamiento"></p>
+        <p>Entrada: <input type="date" name="fecha_entrada"></p>
+        <p>Salida: <input type="date" name="fecha_salida"></p>
+        <p>Importe: <input type="number" name="importe" step="0.01"></p>
+        <p>Notas: <textarea name="notas"></textarea></p>
+
+        <button type="submit">Crear reserva</button>
+    </form>
+
+    <ul id="errores"></ul>
+
+    <script>
+        function crearReserva(evento) {
+            evento.preventDefault();
+
+            const datos = Object.fromEntries(new FormData(evento.target));
+
+            fetch('api.php/reservas', {
+                method: 'POST',
+                body: JSON.stringify(datos)
+            })
+            .then(respuesta => respuesta.json().then(resultado => {
+                if (respuesta.status === 201) {
+                    location.href = 'detalle.php?id=' + resultado.id;
+                    return;
+                }
+
+                // Si hay errores de validación los muestro en una lista
+                const lista = document.getElementById('errores');
+                lista.innerHTML = '';
+                const errores = resultado.errores ? Object.values(resultado.errores) : [resultado.error];
+                errores.forEach(texto => {
+                    const li = document.createElement('li');
+                    li.textContent = texto;
+                    lista.appendChild(li);
+                });
+            }));
+        }
+    </script>
+{% endblock %}

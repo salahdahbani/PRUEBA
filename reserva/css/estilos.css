@@ -1,0 +1,57 @@
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f6f9;
+    color: #333;
+}
+
+.cabecera { background: #152D51; padding: 16px 20px; }
+.cabecera a { color: #fff; text-decoration: none; font-weight: bold; font-size: 18px; }
+
+.contenedor { max-width: 1000px; margin: 0 auto; padding: 20px; }
+
+/* Filtros */
+.filtros {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: flex-end;
+    background: #fff;
+    padding: 16px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+.filtros label { display: flex; flex-direction: column; font-size: 13px; gap: 4px; }
+.filtros input, .filtros select { padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+button { background: #152D51; color: #fff; border: none; padding: 9px 16px; border-radius: 4px; cursor: pointer; }
+button:hover { background: #1f3f6e; }
+
+/* Tabla: con scroll horizontal en móvil */
+.tabla-contenedor { overflow-x: auto; background: #fff; border-radius: 8px; }
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid #eee; white-space: nowrap; }
+th { background: #f0f4ff; font-size: 13px; }
+.derecha { text-align: right; }
+
+/* Estados */
+.estado { padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: bold; }
+.estado-pendiente  { background: #fff3cd; color: #856404; }
+.estado-confirmada { background: #d4edda; color: #155724; }
+.estado-cancelada  { background: #f8d7da; color: #721c24; }
+
+/* Detalle */
+.datos { background: #fff; padding: 16px; border-radius: 8px; display: grid; grid-template-columns: 140px 1fr; gap: 8px 16px; }
+.datos dt { font-weight: bold; color: #152D51; }
+.datos dd { margin: 0; }
+
+/* Historial */
+.timeline { list-style: none; padding: 0 0 0 16px; border-left: 3px solid #152D51; }
+.timeline li { margin-bottom: 12px; padding-left: 12px; }
+.timeline strong { display: block; font-size: 13px; color: #666; }
+
+@media (max-width: 600px) {
+    .datos { grid-template-columns: 1fr; }
+    .filtros { flex-direction: column; align-items: stretch; }
+}

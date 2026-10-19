@@ -33,7 +33,7 @@ class Reserva implements JsonSerializable {
 
     public function setEstado($estado) { $this->estado = $estado; }
 
-    // Necesario para json_encode y para pasar los datos a Twig (los atributos son private)
+    // Necesario para json_encode y para pasar los datos a Twig 
     public function jsonSerialize(): array {
         return get_object_vars($this);
     }
